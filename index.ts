@@ -1,25 +1,26 @@
 import { createServer } from "node:http"
 import { config } from "dotenv"
-import fixUrl from "./src/utils/url.js"
-import UsersDb from "./src/DataBase/db.js"
-import ResponseInterface from "./src/interfaces/response.js"
+import fixUrl from "./src/utils/url"
+import UsersDb from "./src/DataBase/db"
+import ResponseInterface from "./src/interfaces/response"
+import validateBody from "./src/utils/parseBody"
+import getBody from "./src/utils/body"
+import { IncomingMessage, ServerResponse } from 'http';
 
 config()
 
-const server = createServer(async (req, res) => {
+const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
     const url = fixUrl(req.url)
-    const buffers = [] as any;
-	for await (const chunk of req) {
-		buffers.push(chunk);
-	}
-	const body = Buffer.concat(buffers).toString();
     const urlArray = url?.split("/") || []
     const idFromUrl = urlArray[urlArray?.length - 1]
-
+    
     let response: ResponseInterface = {msg: "Resource not found", status: 404};
-
+    
     if(url === "/api/users" && req.method === "GET"){
         response = UsersDb.find()
+    }else if(url === "/api/users" && req.method === "POST"){
+        const body = await getBody(req)
+        response = UsersDb.addNew(body)
     }
 
     res.setHeader('Content-Type', 'application/json')

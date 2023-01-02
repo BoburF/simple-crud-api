@@ -1,7 +1,7 @@
 function fixUrl(url = "/") {
-    const fixedUrl = url
+    let fixedUrl = url
     if(fixedUrl[fixedUrl.length - 1] === "/"){
-        fixedUrl.replace("/", "")
+        fixedUrl = fixedUrl.slice(0, fixedUrl.length - 1)
     }
     return fixedUrl
 }
