@@ -5,32 +5,7 @@ import parseBody from "../utils/parseBody";
 import { parse } from "node:querystring"
 import { validateBody, validatePeaceBody } from "../utils/validateBody";
 
-const dbUsers: UserInterface[] = [
-    {
-        "username": "Bobur",
-        "age": 23,
-        "hobbies": [
-            "Programms"
-        ],
-        "id": "b33fadf2-c942-4d7a-b247-06ba07511763"
-    },
-    {
-        "username": "Bobur",
-        "age": 23,
-        "hobbies": [
-            "Programms"
-        ],
-        "id": "e542685e-89df-4e24-9061-5d040e348542"
-    },
-    {
-        "username": "Bobur",
-        "age": 24,
-        "hobbies": [
-            "Programms"
-        ],
-        "id": "bd72a714-6c30-4611-b727-7f05ac6d094f"
-    }
-]
+const dbUsers: UserInterface[] = []
 
 class UsersDb {
 
