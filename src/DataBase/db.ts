@@ -24,16 +24,16 @@ class UsersDb {
 
             if (!fixedUserWithParse) {
                 fixedUserWithParse = parse(user)
+                fixedUserWithParse.hobbies = JSON.parse(fixedUserWithParse.hobbies)
             }
 
             if (!fixedUserWithParse) {
                 return { msg: "User is required or must be JSON", status: 400 }
             }
-
             const userBody = {
                 username: fixedUserWithParse.username,
                 age: Number(fixedUserWithParse.age),
-                hobbies: JSON.parse(fixedUserWithParse.hobbies),
+                hobbies: fixedUserWithParse.hobbies,
                 id: v4()
             }
 

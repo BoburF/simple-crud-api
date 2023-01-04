@@ -21,12 +21,7 @@ const schema: { [index: string]: any; } = {
     },
     hobbies: (val: any) => {
         const type: boolean = Array.isArray(val)
-        if(type && val.length){
-            const filtered = val.filter((item: any) => typeof item === "string")
-            if(!filtered.length){
-                return("Hobbies is required value must be string")
-            }
-        }else{
+        if(!type){
             return("Hobbies is required")
         }
     },

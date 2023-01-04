@@ -23,7 +23,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
             response = UsersDb.addNew(body)
         } else if (urlArray.length === 4 && req.method === "GET") {
             response = UsersDb.findOne(idFromUrl)
-        } else if (urlArray.length === 4 && req.method === "POST") {
+        } else if (urlArray.length === 4 && req.method === "PUT") {
             const body = await getBody(req)
             response = UsersDb.update(body, idFromUrl)
         } else if (urlArray.length === 4 && req.method === "DELETE") {
@@ -58,3 +58,5 @@ function normalizePort(val: any) {
 
     return false;
 }
+
+export default server
