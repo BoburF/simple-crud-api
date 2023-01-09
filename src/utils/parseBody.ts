@@ -1,3 +1,5 @@
+import { parse } from 'node:querystring';
+
 function parseBody(body: string) {
     try {
         const validated = JSON.parse(body)
@@ -7,4 +9,18 @@ function parseBody(body: string) {
     }
 }
 
-export default parseBody
+function parseBodyForMulti(body: string) {
+    try {
+        let fixedUserWithParse = parseBody(body)
+
+    if (!fixedUserWithParse) {
+        fixedUserWithParse = parse(body)
+        fixedUserWithParse.hobbies = JSON.parse(fixedUserWithParse.hobbies)
+    }
+    return fixedUserWithParse
+    } catch (error) {
+     return false   
+    }
+}
+
+export {parseBody, parseBodyForMulti}

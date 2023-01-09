@@ -1,4 +1,4 @@
-import server from "./index";
+import server from "./src/index";
 import request from 'supertest';
 
 const postUser = {
@@ -8,19 +8,19 @@ const postUser = {
 }
 
 describe('Request to server', () => {
-    test('should return 200 & and empty array', async () => {
+    it('should return 200 & and empty array', async () => {
         const res = await request(server).get(`/api/users`)
         expect(res.body).toMatchObject([])
     })
-    test('should return 200 & user body', async () => {
+    it('should return 200 & user body', async () => {
         const res = await request(server).post(`/api/users`).send(...[postUser])
 
         expect(res.body).toMatchObject({ ...postUser, id: expect.any(String) })
     })
-    test('should return 200 & valid response if request param list is empity', async () => {
+    it('should return 400 & validation parametres', async () => {
         const res = await request(server).post(`/api/users`).send({
-                "saSAs": "aSAsaSAsas"
-            })
+            "saSAs": "aSAsaSAsas"
+        })
 
         expect(res.body).toMatchObject([
             "Username is required or must be string",
@@ -29,7 +29,12 @@ describe('Request to server', () => {
         ])
     })
 
+    it('should return 200 & and array with user', async () => {
+        const res = await request(server).get(`/api/users`)
+        expect(res.body).toMatchObject([postUser])
+    })
+
     afterEach(() => {
-        server.close()
+        server().close()
     })
 })

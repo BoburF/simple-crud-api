@@ -1,9 +1,9 @@
 const path = require("path");
 module.exports = {
-  entry: "./index.ts",
+  entry: "./app.ts",
   output: {
     filename: "app.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "build"),
     clean: true,
   },
   target: "node",

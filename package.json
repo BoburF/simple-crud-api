@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon index.ts",
+    "test": "jest",
+    "start:dev": "nodemon app.ts",
+    "start:multi": "nodemon app.ts ---multi",
     "start:prod": "webpack --mode production && node ./dist/app.js"
   },
   "repository": {

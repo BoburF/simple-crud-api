@@ -1,24 +1,22 @@
 import UserInterface from "../interfaces/user"
 import ResponseInterface from '../interfaces/response';
 import { v4, validate } from "uuid";
-import parseBody from "../utils/parseBody";
+import {parseBody} from "../utils/parseBody";
 import { parse } from "node:querystring"
 import { validateBody, validatePeaceBody } from "../utils/validateBody";
 
-const dbUsers: UserInterface[] = []
-
+const userDB:UserInterface[] = []
 class UsersDb {
-
-    find(): ResponseInterface {
+    async find(): Promise<ResponseInterface> {
         try {
-            const users = JSON.stringify(dbUsers)
+            const users = JSON.stringify(userDB)
             return { msg: users, status: 200 }
         } catch (error) {
             return { msg: "Something went wrong", status: 500 }
         }
     }
 
-    addNew(user: string): ResponseInterface {
+    async addNew(user: string): Promise<ResponseInterface> {
         try {
             let fixedUserWithParse = parseBody(user)
 
@@ -28,7 +26,7 @@ class UsersDb {
             }
 
             if (!fixedUserWithParse) {
-                return { msg: "User is required or must be JSON", status: 400 }
+                return { msg: "User is required user must be JSON or urlencoded", status: 400 }
             }
             const userBody = {
                 username: fixedUserWithParse.username,
@@ -43,14 +41,15 @@ class UsersDb {
                 return { msg: JSON.stringify(required), status: 400 }
             }
 
-            dbUsers.push(userBody)
+            userDB.push(userBody)
+
             return { msg: JSON.stringify(userBody), status: 201 }
         } catch (error) {
             return { msg: "Something went wrong", status: 500 }
         }
     }
 
-    findOne(id: string): ResponseInterface {
+    async findOne(id: string): Promise<ResponseInterface> {
         try {
             const idValid = validate(id)
 
@@ -58,7 +57,7 @@ class UsersDb {
                 return { msg: "User id is not valid", status: 400 }
             }
 
-            const user = dbUsers.find((user: UserInterface) => user.id === id)
+            const user = userDB.find((user: UserInterface) => user.id === id)
 
             if (!user) {
                 return { msg: "User not exist", status: 404 }
@@ -70,16 +69,15 @@ class UsersDb {
         }
     }
 
-    update(bodyPeace: any, id: string) {
+    async update(bodyPeace: any, id: string): Promise<ResponseInterface> {
         try {
             const idValid = validate(id)
 
             if (!idValid) {
                 return { msg: "User id is not valid", status: 400 }
             }
-
             let index = 0
-            const user: UserInterface | undefined = dbUsers.find((user: UserInterface, idx: number) => {
+            const user: UserInterface | undefined = userDB.find((user: UserInterface, idx: number) => {
                 index = idx
                 return user.id === id
             })
@@ -103,29 +101,27 @@ class UsersDb {
                 id: user.id
             }
 
-            dbUsers[index] = userBody
-
+            userDB[index] = userBody
             return { msg: JSON.stringify(userBody), status: 200 }
         } catch (error) {
             return { msg: "Something went wrong", status: 500 }
         }
     }
 
-    deleteOne(id: string) {
+    async deleteOne(id: string): Promise<ResponseInterface> {
         try {
             const idValid = validate(id)
 
             if (!idValid) {
                 return { msg: "User id is not valid", status: 400 }
             }
-
-            const userIndex = dbUsers.findIndex((user: UserInterface) => user.id === id)
+            const userIndex = userDB.findIndex((user: UserInterface) => user.id === id)
 
             if (userIndex === -1) {
                 return { msg: "User not exist", status: 404 }
             }
 
-            const user = dbUsers.splice(userIndex, 1)
+            const user = userDB.splice(userIndex, 1)
 
             return { msg: `User deleted: ${JSON.stringify(user[0])}`, status: 204 }
         } catch (error) {
