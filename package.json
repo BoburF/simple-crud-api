@@ -7,7 +7,7 @@
     "test": "jest",
     "start:dev": "nodemon app.ts",
     "start:multi": "nodemon app.ts ---multi",
-    "start:prod": "webpack --mode production && node ./dist/app.js"
+    "start:prod": "webpack --mode production && node ./build/app.js"
   },
   "repository": {
     "type": "git",
