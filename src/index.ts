@@ -1,9 +1,8 @@
-import { createServer, request } from "node:http"
+import { createServer, IncomingMessage, ServerResponse } from "node:http"
 import fixUrl from "./utils/url"
 import UsersDb from "./DataBase/dbUsers"
 import ResponseInterface from "./interfaces/response"
 import getBody from "./utils/body"
-import { IncomingMessage, ServerResponse } from 'http';
 
 const avarageServer = () => {
     return createServer(async (req: IncomingMessage, res: ServerResponse) => {

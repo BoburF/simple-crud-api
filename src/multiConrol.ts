@@ -4,21 +4,19 @@ import { cpus } from "node:os"
 import { config } from "dotenv"
 import normalizePort from './utils/normalizePort';
 import getBody from './utils/body';
-import UserInterface from './interfaces/user';
-import {parseBody, parseBodyForMulti} from "./utils/parseBody";
 
 config()
 
 const balancer = () => {
-  let cpuTotal = 1
+  let cpuTarget = 1
   return createServer(async (req: IncomingMessage, res: ServerResponse) => {
     try {
-      if (cpuTotal >= cpus().length + 1) {
-        cpuTotal = 1
+      if (cpuTarget >= cpus().length + 1) {
+        cpuTarget = 1
       }
 
       const reqOptions: RequestOptions = {
-        port: normalizePort(process.env.PORT) + cpuTotal,
+        port: normalizePort(process.env.PORT) + cpuTarget,
         path: req.url,
         method: req.method
       }
@@ -36,8 +34,7 @@ const balancer = () => {
         res.end(resFromSer)
       })
 
-      requestToSer.end(() => cpuTotal += 1);
-
+      requestToSer.end(() => cpuTarget += 1);
     } catch (error) {
       console.log(error);
       res.statusCode = 500
